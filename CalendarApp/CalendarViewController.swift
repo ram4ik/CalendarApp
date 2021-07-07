@@ -18,12 +18,21 @@ class ViewController: DayViewController {
         
         title = "Calendar"
         requestAccessToCakendar()
+        subscribeToNotification()
     }
 
     func requestAccessToCakendar() {
         eventStore.requestAccess(to: .event) { success, error in
             
         }
+    }
+    
+    func subscribeToNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(storeChange(_:)), name: .EKEventStoreChanged, object: nil)
+    }
+    
+    @objc func storeChange(_ notification: Notification) {
+        reloadData()
     }
     
     override func eventsForDate(_ date: Date) -> [EventDescriptor] {
